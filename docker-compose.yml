@@ -29,8 +29,8 @@ services:
     env_file: ./prod.env
     environment:
       - JAEGER_AGENT_HOST=jaeger
-      - STOREFRONT_URL=${STOREFONT_URL:http://localhost:3000/}
-      - DASHBOARD_URL=${DASHBOARD_URL:http://localhost:9000/}
+      - STOREFRONT_URL=http://104.248.160.146/:3000/
+      - DASHBOARD_URL=http://104.248.160.146/:9000/
 
   storefront:
     build:
