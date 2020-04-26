@@ -29,13 +29,15 @@ services:
     env_file: ./saleor/common.env
     environment:
       - JAEGER_AGENT_HOST=jaeger
-      - STOREFRONT_URL=http://localhost:3000/
-      - DASHBOARD_URL=http://localhost:9000/
+      - STOREFRONT_URL=http://104.248.160.146/:3000/
+      - DASHBOARD_URL=http://104.248.160.146/:9000/
 
   storefront:
     build:
       context: ./saleor-storefront
       dockerfile: ./Dockerfile.dev
+      args:
+        API_URL: 'http://104.248.160.146:8000/graphql/'
     ports:
       - 3000:3000
     restart: unless-stopped
@@ -48,6 +50,10 @@ services:
     build:
       context: ./saleor-dashboard
       dockerfile: ./Dockerfile.dev
+      args:
+        API_URL: 'http://104.248.160.146:8000/graphql/'
+        # APP_MOUNT_URI: -/dashboard/
+        # STATIC_URL: -/dashboard/
     ports:
       - 9000:9000
     restart: unless-stopped
@@ -93,6 +99,7 @@ services:
     depends_on:
       - redis
     volumes:
+      # 'cached' is used to mitigate performance issue on Mac
       - ./saleor/saleor/:/app/saleor:Z,cached
       - ./saleor/templates/:/app/templates:Z,cached
       # prevents overshadowing of build-time assets
